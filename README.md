@@ -32,3 +32,10 @@ The KS X 1001 table has holes. For example, `0xA2 0xA1` is not assigned to any c
 the decoder throws rather than guessing. If you are reading a stream, a multi-byte sequence can
 be split across chunks; use `EucKrDecoder` so a dangling lead byte is buffered until the next
 chunk arrives. Forgetting to call `flush()` at the end will hide a truncated final character.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
